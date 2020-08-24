@@ -1,0 +1,16 @@
+{{#with todo}}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{title}}</h3>
+    </div>
+    <div class="panel-body">
+        {{#if description}}
+            {{description}}
+        {{else}}
+            No description.
+        {{/if}}
+    </div>
+    <div class="panel-footer">Created at {{created_at}}</div>
+</div>
+{{/with}}
+<a href="/todos" class="btn btn-primary" type="button">Back to todos</a>
