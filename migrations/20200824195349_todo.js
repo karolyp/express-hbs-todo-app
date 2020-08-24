@@ -4,7 +4,7 @@ exports.up = function (knex) {
         table.string('title').notNullable();
         table.text('description');
         table.boolean('priority').notNullable().defaultTo(false);
-        table.timestamps(false, true);
+        table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable();
     });
 };
 
