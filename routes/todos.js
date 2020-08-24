@@ -25,18 +25,36 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
+    await respondAndRenderTodo(req, res, 'todo', 'Todo');
+});
+
+router.get('/:id/edit', async (req, res) => {
+    await respondAndRenderTodo(req, res, 'edit', 'Edit todo');
+});
+
+router.put('/:id', async (req, res) => {
+    if (isTodoValid(req.body)) {
+        const id = req.params.id;
+        const todo = {title, description, priority} = req.body;
+        await knex('todos')
+            .where({id})
+            .update(todo, 'id');
+        res.redirect(`/todos/${id}`)
+    } else {
+        res.sendStatus(404);
+    }
+});
+
+async function respondAndRenderTodo(req, res, viewName, title) {
     const id = req.params.id;
     const todo = await knex('todos').select().where({id}).first();
     if (todo) {
         todo.created_at = todo.created_at.toLocaleString();
-        res.render('todo', {title: `Todo #${id}`, todo});
+        res.render(viewName, {title, todo});
     } else {
-        res.status(404);
-        res.render('error', {
-            message: `Cannot find todo with id ${id}`
-        });
+        res.sendStatus(404);
     }
-});
+}
 
 function isTodoValid(todo) {
     return todo.title && todo.priority;
